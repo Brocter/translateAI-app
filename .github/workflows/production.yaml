@@ -33,7 +33,7 @@ jobs:
             cd /root/repos/translateAI-app
             git pull origin main
             cat <<EOF > .env
-            VITE_BACKEND_URL=${{ secrets.VITE_OPEN_AI_KEY }}
+            VITE_OPEN_AI_KEY=${{ secrets.VITE_OPEN_AI_KEY }}
             EOF
             docker-compose down -v
             docker-compose build
