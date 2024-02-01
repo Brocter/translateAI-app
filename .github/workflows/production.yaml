@@ -1,0 +1,40 @@
+name: Deploy App to VPS
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/**"
+      - "index.html"
+      - "package.json"
+      - "public/**"
+      - "src/**"
+      - "vite.config.js"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Deploy using ssh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.PRODUCTION_SSH_HOST }}
+          username: ${{ secrets.PRODUCTION_SSH_USERNAME }}
+          key: ${{ secrets.PRODUCTION_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /root/repos/translateAI-app
+            git pull origin main
+            cat <<EOF > .env
+            VITE_BACKEND_URL=${{ secrets.VITE_OPEN_AI_KEY }}
+            EOF
+            docker-compose down -v
+            docker-compose build
+            docker-compose up -d
