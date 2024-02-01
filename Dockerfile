@@ -4,10 +4,16 @@ WORKDIR /app
 
 COPY package.json ./
 
-RUN npm install
+RUN npm install serve -g
+RUN npm install -g create-vite
+RUN npm install -g vite
+RUN npm install -g pnpm
+RUN pnpm install
 
 COPY . .
 
+RUN npm run build
+
 EXPOSE 5173
 
-CMD ["npm", "start"]
+CMD ["serve", "-s", "dist", "-p", "5173"]

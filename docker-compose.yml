@@ -1,7 +1,7 @@
 version: "3.8"
 services:
-  piletas-frontend-production:
-    container_name: piletas-frontend-production
+  frontend-production:
+    container_name: frontend-production
     build:
       dockerfile: Dockerfile
       context: .
